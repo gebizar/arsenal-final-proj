@@ -11,12 +11,7 @@
   color:"#ffffff"
 /]
 [Fixed]
-
- 
-
   [CardVis /]
-
-
 [/Fixed]
 
 
@@ -29,8 +24,6 @@ idyll, run the command `idyll` inside of this directory.
 
 Idyll posts are designed to support interaction and
 data-driven graphics.
-
-
 
 [var name:"state" value:0 /]
 [button onClick:`state++`]
