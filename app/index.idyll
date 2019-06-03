@@ -1,15 +1,24 @@
-[meta title:"App" description:"Short description of your project" /]
+[meta title:"Headsup Poker" description:"Short description of your project" /]
 
 [Header
   fullWidth:true
-  title:"App"
-  subtitle:"Welcome to Idyll. Open index.idyll to start writing"
-  author:"Your Name Here"
+  title:"Beat the House."
+  subtitle:"The inner workings of 1-on-1 Poker"
+  author:"Gabe Bizar, Naman Mehra, and Christian Hahn"
   authorLink:"https://idyll-lang.org"
   date:`(new Date()).toDateString()`
-  background:"#222222"
+  background:"#8a0303"
   color:"#ffffff"
-   /]
+/]
+[Fixed]
+
+ 
+
+  [CardVis /]
+
+
+[/Fixed]
+
 
 ## Introduction
 
@@ -21,11 +30,13 @@ idyll, run the command `idyll` inside of this directory.
 Idyll posts are designed to support interaction and
 data-driven graphics.
 
+
+
 [var name:"state" value:0 /]
-[CustomD3Component className:"d3-component" state:state /]
 [button onClick:`state++`]
   Click Me.
 [/button]
+
 
 Configuration can be done via the `idyll` field in `package.json`.
 
