@@ -9,17 +9,12 @@ const suits = ["♠", "♣", "♥", "♦"];
 
 const DeckStyle = styled.div`
     border-radius: 10%;
-    width: auto !important;
     background-color: white;
+    width: 100px !important;
     word-wrap: break-word;
     box-shadow: 0 0.0625em 0.1875em 0 rgba(0, 0, 0, 0.1), 0 0.5em 0 -0.25em #f2f2f2, 0 0.5em 0.1875em -0.25em rgba(0, 0, 0, 0.1), 0 1em 0 -0.5em #e5e5e5, 0 1em 0.1875em -0.5em rgba(0, 0, 0, 0.1);
 
 `
-
-// margin: 0 auto 2rem;
-//     padding: 1rem;
-//     min-width: 10rem;
-//     max-width: 20rem;
 
 function makeCards(suits, cardPrimitives) {
     let allPlayedCards = [];
@@ -28,12 +23,10 @@ function makeCards(suits, cardPrimitives) {
         let currSize = allPlayedCards.length
         while (allPlayedCards.length == currSize) {
             let newArr = allPlayedCards.filter(function(card){
-                console.log(card);
                 card.value == newCard.value && card.suit == newCard.suit
             });
             if (newArr.length == 0) {
                 allPlayedCards.push(newCard);
-                console.log(allPlayedCards.length, "APC LENGTH")
             } else {
                 newCard = makeRandCard(suits, cardPrimitives);
             }
@@ -51,7 +44,6 @@ function makeRandCard(suits, cardPrimitives) {
     };
 }
 
-// let cards = makeCards(suits, cardPrimitives);
 
 class CardVis extends React.PureComponent {
     constructor(props) {
@@ -60,7 +52,6 @@ class CardVis extends React.PureComponent {
             parent: "",
             allCards: makeCards(suits, cardPrimitives)
         };
-        // this.state = {allCards: makeCards(suits, cardPrimitives)};
     }
     componentDidMount(){
         this.setState({
@@ -68,12 +59,20 @@ class CardVis extends React.PureComponent {
             allCards: makeCards(suits, cardPrimitives)
         });
     }
+    updateProps() {
+    
+    }
     render() {
         const { idyll, hasError, updateProps, ...props } = this.props;
         return (
-          <DeckStyle {...props}>
-            <Card len={150} wid={100} suit={this.state.allCards[0].suit} value={this.state.allCards[0].value} />
-          </DeckStyle>
+            <div style={{top: "5vw", marginLeft: "50vw", position: "relative"}}>
+                <DeckStyle {...props} style={{backgroundImage: `url("../static/images/card_back.svg)`}}>
+                    <img className="cardback" src="../static/images/card_back.svg" alt="Avatar" />
+                </DeckStyle>
+                {this.state.allCards.map((card, i) => (
+                    <Card len={150} wid={100} suit={card.suit} value={card.value} ind={i} />
+                ))}
+            </div>
         );
     }
   
