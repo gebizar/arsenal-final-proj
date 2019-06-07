@@ -10,8 +10,11 @@
   background:"#8a0303"
   color:"#ffffff"
 /]
+[var name:'phase' value:-1 /]
+[Display value: `phase`/]
+
 [Fixed]
-  [CardVis /]
+  [CardVis  phase: `phase`/]
 [/Fixed]
 
 
@@ -34,6 +37,12 @@ data-driven graphics.
 Configuration can be done via the `idyll` field in `package.json`.
 
 ## Markup
+[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
+[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
+[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
+[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
+
+
 
 Idyll is based on Markdown.
 
@@ -70,8 +79,17 @@ in addition to [hyperlinks](https://idyll-lang.org) and images:
 ```
 
 ## Components
+[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
+[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
+[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
+[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
+[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
+[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
+
 
 Components can be embedded using a bracket syntax:
+[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
+[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
 
 ```
 [Range /]
@@ -85,9 +103,12 @@ and can contain nested content:
 
 Components accept properties:
 
+
+
 ```
 [Range value:x min:0 max:1 /]
 ```
+
 
 that can be bound to variables to achieve interactivity (more in next section).
 
@@ -116,5 +137,7 @@ Here is how you can instantiate a variable and bind it to a component:
 
 ## Learn More
 
+
 To learn more see the documentation at https://idyll-lang.org/docs/,
 join our [chatroom](https://gitter.im/idyll-lang/Lobby), or see the project on [GitHub](https://github.com/idyll-lang/idyll).
+

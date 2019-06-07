@@ -4,6 +4,12 @@ import Card from "./Card.js"
 const cardPrimitives = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 const suits = ["♠", "♣", "♥", "♦"];
 
+const yourHand = [0, 2];
+const oppoHand = [1,3];
+const board= [5,6,7,9,11];
+const burn= [4,8,10];
+
+
 
 
 
@@ -50,7 +56,8 @@ class CardVis extends React.PureComponent {
         super(props)
         this.state = {
             parent: "",
-            allCards: makeCards(suits, cardPrimitives)
+            allCards: makeCards(suits, cardPrimitives),
+            phases: [this.props.phase]
         };
     }
     componentDidMount(){
@@ -59,18 +66,26 @@ class CardVis extends React.PureComponent {
             allCards: makeCards(suits, cardPrimitives)
         });
     }
-    updateProps() {
-    
-    }
+
+    componentDidUpdate(prevProps) {
+        let copy = this.state.phases
+        console.log("PHASES", this.state.phases)
+        if (this.state.phases.indexOf(this.props.phase) == -1) {
+            this.setState({
+                phases: this.state.phases.concat(this.props.phase)
+            })
+        }
+      } 
+   
     render() {
         const { idyll, hasError, updateProps, ...props } = this.props;
         return (
-            <div style={{top: "5vw", marginLeft: "50vw", position: "relative"}}>
+            <div style={{top: "0", marginLeft: "50vw", position: "relative"}}>
                 <DeckStyle {...props} style={{backgroundImage: `url("../static/images/card_back.svg)`}}>
                     <img className="cardback" src="../static/images/card_back.svg" alt="Avatar" />
                 </DeckStyle>
                 {this.state.allCards.map((card, i) => (
-                    <Card len={150} wid={100} suit={card.suit} value={card.value} ind={i} />
+                    <Card len={150} wid={100} suit={card.suit} value={card.value} ind={i} key={i} phase={this.state.phases}/>
                 ))}
             </div>
         );
