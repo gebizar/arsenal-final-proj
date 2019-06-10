@@ -57,12 +57,15 @@ There are several different ways to calculate the odds of winning in the game of
 
 In Texas Hold’em poker there is an idea of [Current Hand Odds](https://pdfs.semanticscholar.org/a286/a185ce03a60cea3703a081d88e9ea93c8a70.pdf). It’s the idea that with the combined knowledge of your hand and the current visible shared cards one can determine the probability of having a better hand than the opponents. For example, consider the following board state:
 
-Then the opponents can have any cards that are not K♣, A♣, 2♠, 5♥ or 9♦. However, even knowing that does not mean that the devising the number of combinations is fast, let alone easy. There are 47^6 number of combinations. To do this efficiently, one can understand a subset of the problem and use that to approximate the larger calculation. With this method only 1225 possibilities are taken into account and with that we can determine the hand strength. 
+[ImgComponent width:"700px" height:"150px" path:"../static/images/board_state.png"/]
+
+
+Then the opponents can have any cards that are not K♣, A♣, 2♠, 5♥ or 9♦. However, even knowing that does not mean that the devising the number of combinations is fast, let alone easy. There are [Equation] 47^6 [/Equation] number of combinations. To do this efficiently, one can understand a subset of the problem and use that to approximate the larger calculation. With this method only 1225 possibilities are taken into account and with that we can determine the hand strength. 
 
 
 
 [Equation]
-HS<sub>n</sub> = (HS<sub>1</sub>)^n
+HS_n = (HS_1)^n
 [/Equation]
 
 
@@ -74,9 +77,13 @@ Let's check out the next card, "The Turn Card"
 
 
 
-Hand strength and opponent modeling can be combined to get a better approximation. Instead of looking at all the possible combinations the combined algorithm “iterates over the cards that the opponent probably has, using [Sklansky Groups 3](http://www.thepokerbank.com/strategy/basic/starting-hand-selection/sklansky-groups/)” (Teófilo et al). Sklansky Groups is a way to categorize starting hands. In this case three groups are used. However, this is only tested and effective in heads-up games (poker games where there are only two players left in the match).  
+Hand strength and opponent modeling can be combined to get a better approximation. Instead of looking at all the possible combinations the combined algorithm iterates over the cards that the opponent probably has, using [Sklansky Groups 3](http://www.thepokerbank.com/strategy/basic/starting-hand-selection/sklansky-groups/). 
+Sklansky Groups is a way to categorize starting hands. In this case three groups are used. However, this is only tested and effective in heads-up games, poker games where there are only two players left in the match.  
 Finally, let's check out the remaining, and final card, "The River"
+
 [CustomComponent text:"The River, the Final Card" onEnterView:`phase++`  scrollOffset: 100/]
+
+Here is the overview of the code to make the calculations:
 
 ```
 function HandStrength(ourcards, boardcards){
