@@ -13,6 +13,10 @@
 .fixed {
   top: -35vw;
   right: 10vw;
+  background-color: #f9f9f9;
+  margin-right: 0px;
+  float: right;
+  right: 0px;
 }
 .flip-card {
   border-radius: 10%;
