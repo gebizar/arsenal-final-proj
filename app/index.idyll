@@ -11,133 +11,93 @@
   color:"#ffffff"
 /]
 [var name:'phase' value:-1 /]
-[Display value: `phase`/]
+[var name: 'yourOdds' value: 0/]
+[var name: 'oppoOdds' value: 0/]
+[var name: 'tie' value: 0/]
+
+// [Display value: phase/]
+// [Display value: `yourOdds`/]
+// [Display value: `oppoOdds`/]
+// [Display value: `tie`/]
+
 
 [Fixed]
-  [CardVis  phase: `phase`/]
+  [CardVis phase: `phase` yo:yourOdds oo:oppoOdds tie:tie /]
 [/Fixed]
 
 
 ## Introduction
+Let's Start by Dealing the Opening Hands
 
-This is an Idyll post. It is generated via
-the file `index.idyll`. To compile this post using
-idyll, run the command `idyll` inside of this directory.
-
-
-Idyll posts are designed to support interaction and
-data-driven graphics.
-
-[var name:"state" value:0 /]
-[button onClick:`state++`]
-  Click Me.
-[/button]
+[CustomComponent text:"Opening Hands" onEnterView:`phase++`   scrollOffset:-350/]
 
 
-Configuration can be done via the `idyll` field in `package.json`.
+Poker is one of the oldest card games known to man. Its origins are convoluted but Texas Hold'em Poker has universally become the most popular form of the game. The role of chance or luck in Texas Hold'em poker has been debated heavily recently. However, several research papers and other reliable sources have clearly demonstrated that the game is one of skill. 
 
-## Markup
-[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
-[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
-[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
-[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
+To truly become a great player at the game, a high degree of knowledge of mathematics and psychology are needed. Furthermore, experience is another factor that plays an integral role in the success of poker players. The more time a player has spent playing, the game the more time he or she has to understand and implement statistical strategies. Additionally, reading people, especially in a game setting, takes practice and time. 
 
+The mathematical and psychological strategies in poker are often times more complex than one may think and requires quick calculations and emotional judgment. In one-on-one or "heads-up" poker, having visual probabilities can be useful to make intelligent decisions and ultimately, to outsmart your opponent.
 
+## Simple Rules
 
-Idyll is based on Markdown.
+Poker odds, while intimidating at first, can come quickly with a simple amount of arithmetic and fast thinking. Once the two players  each have two cards, the three cards dealt (called the flop) dictate what combos you can string in combination with your two cards. The next two cards placed on the board (called the turn and the river) are the last  cards dealt in the round and the objective is to use the five cards on the board and the two cards you have to string together the best hand.
 
-You can use familiar syntax
-to create **bold** (`**bold**` ) and *italic* (``*italic*` ) styles,
+Here is the rank of the best combined hands, from the set of 7 (your hand and the table cards):
 
-* lists
-* of
-* items,
+[ImgComponent width:"450px" height:"600px" path:"https://www.cardschat.com/pkimg/hand-nicknames/poker-hand-rankings.png"/]
 
-```
-* lists
-* of
-* items,
-```
+Scroll down the page to trigger events that show the different probabilities of getting a certain hand. The hands are dealt randomly and each animation triggers a different part of the round.
 
-1. and numbered
-2. lists
-3. of items,
+## Odds Calculation
+Let's start with the Flop
+[CustomComponent text:"The Flop" onEnterView:`phase++`  /]
 
 
-```
-1. and numbered
-2. lists
-3. of items,
-```
+There are several different ways to calculate the odds of winning in the game of poker. Additionally, the odds are dynamic and change as the table cards are opened. We will be looking at hand strength combined with opponent modeling. 
 
-in addition to [hyperlinks](https://idyll-lang.org) and images:
+In Texas Hold’em poker there is an idea of [Current Hand Odds](https://pdfs.semanticscholar.org/a286/a185ce03a60cea3703a081d88e9ea93c8a70.pdf). It’s the idea that with the combined knowledge of your hand and the current visible shared cards one can determine the probability of having a better hand than the opponents. For example, consider the following board state:
 
-![quill](static/images/quill.svg)
+Then the opponents can have any cards that are not K♣, A♣, 2♠, 5♥ or 9♦. However, even knowing that does not mean that the devising the number of combinations is fast, let alone easy. There are 47^6 number of combinations. To do this efficiently, one can understand a subset of the problem and use that to approximate the larger calculation. With this method only 1225 possibilities are taken into account and with that we can determine the hand strength. 
+
+
+
+[Equation]
+HS<sub>n</sub> = (HS<sub>1</sub>)^n
+[/Equation]
+
+
+
+Let's check out the next card, "The Turn Card"
+
+
+[CustomComponent text:"The Turn Card" onEnterView:`phase++`   scrollOffset: 100/]
+
+
+
+Hand strength and opponent modeling can be combined to get a better approximation. Instead of looking at all the possible combinations the combined algorithm “iterates over the cards that the opponent probably has, using [Sklansky Groups 3](http://www.thepokerbank.com/strategy/basic/starting-hand-selection/sklansky-groups/)” (Teófilo et al). Sklansky Groups is a way to categorize starting hands. In this case three groups are used. However, this is only tested and effective in heads-up games (poker games where there are only two players left in the match).  
+Finally, let's check out the remaining, and final card, "The River"
+[CustomComponent text:"The River, the Final Card" onEnterView:`phase++`  scrollOffset: 100/]
 
 ```
-![quill](static/images/quill.svg)
-```
-
-## Components
-[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
-[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
-[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
-[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
-[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
-[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
-
-
-Components can be embedded using a bracket syntax:
-[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
-[CustomComponent onEnterView:`phase++`  onExitView:`phase = phase - 1`/]
-
-```
-[Range /]
-```
-
-and can contain nested content:
-
-```
-[Equation]e = mc^{2}[/Equation]
-```
-
-Components accept properties:
-
-
-
-```
-[Range value:x min:0 max:1 /]
+function HandStrength(ourcards, boardcards){
+ ahead = tied = behind = 0
+ ourrank = Rank(ourcards, boardcards)
+ /*Consider all two-card combinations of remaining
+cards*/
+ for each case(oppcards) {
+ opprank = Rank(oppcards, boardcards)
+ if(ourrank > opprank) ahead++
+ else if (ourrank == opprank) tied++
+ else behind++
+ }
+ return (ahead + tied / 2) / (ahead + tied + behind)
+}
 ```
 
 
-that can be bound to variables to achieve interactivity (more in next section).
-
-
-A variety of components are included by default. See [all the available components](https://idyll-lang.org/docs/components/). You can also use any html tag, for example: `[div] A div! [/div]`.
-
-To create your own, add it to the `components/` folder. There are examples of how to use Idyll with React and D3 based components already included.
 
 
 
-## Interactivity
-
-Here is how you can instantiate a variable and bind it to a component:
-
-[var name:"exampleVar" value:5 /]
-
-[Range min:0 max:10 value:exampleVar /]
-[Display value:exampleVar /]
-
-```
-[var name:"exampleVar" value:5 /]
-
-[Range min:0 max:10 value:exampleVar /]
-[Display value:exampleVar /]
-```
-
-## Learn More
 
 
-To learn more see the documentation at https://idyll-lang.org/docs/,
-join our [chatroom](https://gitter.im/idyll-lang/Lobby), or see the project on [GitHub](https://github.com/idyll-lang/idyll).
 

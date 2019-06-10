@@ -9,7 +9,7 @@ const yourHand = [0,2];
 const oppoHand = [1,3];
 const board= [5,6,7,9,11];
 const burn= [4,8,10];
-
+const sets = [[0,1,2,3], [4,5,6,7], [8,9], [10,11]];
 
 
 
@@ -31,7 +31,7 @@ function makeCards(suits, cardPrimitives) {
         let currSize = allPlayedCards.length
         while (allPlayedCards.length == currSize) {
             let newArr = allPlayedCards.filter(function(card){
-                card.value == newCard.value && card.suit == newCard.suit
+                return card.value == newCard.value && card.suit == newCard.suit
             });
             if (newArr.length == 0) {
                 allPlayedCards.push(newCard);
@@ -100,10 +100,10 @@ class CardVis extends React.PureComponent {
         this.state = {
             parent: "",
             allCards: [],
-            phases: [this.props.phase],
             yourOdds: "Unknown",
             oppoOdds: "Unknown",
             tie: "Unknown",
+            toPass: []
         };
         this.calculateOdds = this.calculateOdds.bind(this)
     }
@@ -115,24 +115,37 @@ class CardVis extends React.PureComponent {
     }
 
     componentDidUpdate(prevProps) {
-        // console.log("PHASES", this.state.phases)
-        if (this.state.phases.indexOf(this.props.phase) == -1) {
-            this.setState({
-                phases: this.state.phases.concat(this.props.phase)
-            })
-        }
-        if (this.state.phases.length == 4) {
-            this.calculateOdds(3)
-        } else if (this.state.phases.length == 5) {
-            this.calculateOdds(4)
-        } else if (this.state.phases.length == 6) {
-            this.calculateOdds(5)
+        console.log("PHASES", this.props.phase)
+        if (this.props.phase !== prevProps.phase && this.props.phase < 4) {
+            if (this.props.phase > -1) {
+                let allNums = []
+                let tempToPass = this.state.toPass
+                sets[this.props.phase].forEach(function(cardVal) {
+                    if (tempToPass.indexOf(cardVal) == -1) {
+                        allNums.push(cardVal)
+                    }
+                })
+                this.setState({
+                    toPass: this.state.toPass.concat(allNums)
+                })
+            }
+            console.log("LENGTH TO PASS", this.state.toPass)
+            if (this.props.phase == 0) {
+                this.calculateOdds(2)
+            } else if (this.props.phase == 1) {
+                this.calculateOdds(3)
+            } else if (this.props.phase == 2) {
+                this.calculateOdds(4)
+            } else if (this.props.phase == 3) {
+                this.calculateOdds(5)
+            }
         }
     } 
-
    
 
     calculateOdds(revealed) {
+        let odds
+        console.log("revealed", revealed, this.state.toPass.length)
         let yh = this.state.allCards.filter(function(card, ind) {
             return yourHand.includes(ind);
         })
@@ -140,18 +153,21 @@ class CardVis extends React.PureComponent {
             return oppoHand.includes(ind);
         })
         let bothHands = convertHands(yh, oh)
-        let subBoard = board.slice(0, revealed)
-        let b = this.state.allCards.filter(function(card, ind) {
-            return subBoard.includes(ind)
-        })
-        let boardConv = []
-        b.forEach(function(card) {
-            boardConv.push(exchangeCard(card));
-        })
-        console.log("boardConv", bothHands, boardConv)
+        if (revealed == 2) {
+            odds = calculateEquity(bothHands, [], 2000, false)
+            console.log("2 Odds", odds)
+        } else {
+            let subBoard = board.slice(0, revealed)
+            let b = this.state.allCards.filter(function(card, ind) {
+                return subBoard.includes(ind)
+            })
+            let boardConv = []
+            b.forEach(function(card) {
+                boardConv.push(exchangeCard(card));
+            })
+            odds = calculateEquity(bothHands, boardConv, 2000, false)
 
-        let odds = calculateEquity(bothHands, boardConv, 2000, false)
-        console.log("odds",odds)
+        }
         let count = odds[0].count
         let yourOdds = (Math.round(odds[0].wins * 1000 / count) / 10) + "%"
         let yourTie = (Math.round(odds[0].ties * 1000 / count) / 10) + "%"
@@ -160,6 +176,11 @@ class CardVis extends React.PureComponent {
             yourOdds: yourOdds,
             oppoOdds: oppoOdds,
             tie: yourTie
+        })
+        this.props.updateProps({
+            yo: this.state.yourOdds,
+            oo: this.state.oppoOdds,
+            tie: this.state.tie
         })
 
     }
@@ -173,7 +194,7 @@ class CardVis extends React.PureComponent {
                         <img className="cardback" src="../static/images/card_back.svg" alt="Avatar" />
                     </DeckStyle>
                     {this.state.allCards.map((card, i) => (
-                        <Card len={105} wid={70} suit={card.suit} value={card.value} ind={i} key={i} phase={this.state.phases}/>
+                        <Card len={105} wid={70} suit={card.suit} value={card.value} ind={i} key={i} phase={this.state.toPass}/>
                     ))}
                 </div>
                 <p style={{position: "absolute", left: "150px", bottom: "75px", textAlign:"center"}}>Your Odds of Winning: {this.state.yourOdds}</p>
